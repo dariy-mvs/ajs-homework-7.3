@@ -1,61 +1,22 @@
-import Team from '../app';
+import ErrorRepository from '../app';
 
-test('Creating Team', () => {
-  let myTeam = new Team;
-  console.log(myTeam);
-  expect(myTeam).toEqual({
-    members: new Set()
-  })
+test('Creating ErrorRepository', () => {
+  const errorRepository = new ErrorRepository();
+  expect(errorRepository).toEqual({
+    errors: new Map(),
+  });
 });
 
-test('Add Hero in team', () => {
-  let myTeam = new Team;
-  let myHero = {
-    attack: 25
-  };
-  let setHero = new Set();
-  setHero.add(myHero);
-  myTeam.add(myHero);
-  expect(myTeam).toEqual({
-    members: setHero
-    })
+test('getErrorText', () => {
+  const errorRepository = new ErrorRepository();
+  errorRepository.errors.set(1, 'you just left the room');
+  const textOfMyError = errorRepository.translate(1);
+  expect(textOfMyError).toBe('you just left the room');
 });
 
-test('Add Hero in team Error', () => {
-  
-  expect(() => {
-    let myTeam = new Team;
-    const myHero = {
-    attack: 25
-  };
-  myTeam.add(myHero);
-  myTeam.add(myHero);
-  }).toThrow('такой персонаж уже есть в команде');
-});
-
-test('Add Heroes in team', () => {
-  let myTeam = new Team;
-  const myHero = {
-    attack: 25
-  };
-  const notMyHero = {
-    attack: 15
-  }
-  let setHero = new Set();
-  setHero.add(myHero);
-  setHero.add(notMyHero);
-  myTeam.addAll(myHero, notMyHero, myHero);
-  expect(myTeam).toEqual({
-    members: setHero
-    })
-});
-
-test('Set in Array', () => {
-  let myTeam = new Team;
-  const myHero = {
-    attack: 25
-  };
-  myTeam.add(myHero);
-  const teamArray = myTeam.toArray();
-  expect(teamArray).toEqual([myHero]);
+test('getUnknownErrorText', () => {
+  const errorRepository = new ErrorRepository();
+  errorRepository.errors.set(1, 'you just left the room');
+  const textOfMyError = errorRepository.translate(2);
+  expect(textOfMyError).toBe('Unknown error');
 });

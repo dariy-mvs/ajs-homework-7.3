@@ -1,25 +1,14 @@
-
 // TODO: write your code here
 
-export default class Team {
+export default class ErrorRepository {
   constructor() {
-      this.members = new Set();
-  }
-  add(Character) {
-    if (this.members.has(Character)) {
-      throw Error('такой персонаж уже есть в команде')
-    } else {
-      this.members.add(Character); // Я, видимо, не совсем понимаю задание... Зачем делать проверку, если метод add и так ничего не дублирует?
-    }
+    this.errors = new Map();
   }
 
-  addAll(...args) {
-    args.forEach(el => {
-      this.members.add(el);
-    })
-  }
-
-  toArray() {
-    return [...this.members];
+  translate(code) {
+    const responseTextError = this.errors.get(code);
+    if (responseTextError) {
+      return responseTextError;
+    } return 'Unknown error';
   }
 }
