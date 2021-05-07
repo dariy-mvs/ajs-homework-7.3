@@ -1,28 +1,61 @@
-import getLevel from '../app';
-import fetchData from '../http';
+import Team from '../app';
 
-test('fetchData', () => {
-  expect(fetchData()).toBe(undefined);
+test('Creating Team', () => {
+  let myTeam = new Team;
+  console.log(myTeam);
+  expect(myTeam).toEqual({
+    members: new Set()
+  })
 });
 
-jest.mock('../http');
-
-beforeEach(() => {
-  jest.resetAllMocks();
-});
-
-test('getLevel', () => {
-  fetchData.mockReturnValue('{}');
-  getLevel(1);
-  expect(fetchData).toBeCalledTimes(1);
-  expect(fetchData).toHaveBeenCalledWith('https://server/user/1');
-});
-
-test('getLevel', () => {
-  const responseObj = {
-    status: 'ok',
-    level: 5,
+test('Add Hero in team', () => {
+  let myTeam = new Team;
+  let myHero = {
+    attack: 25
   };
-  fetchData.mockReturnValue(responseObj);
-  expect(getLevel(1)).toEqual(`Ваш текущий уровень: ${5}`);
+  let setHero = new Set();
+  setHero.add(myHero);
+  myTeam.add(myHero);
+  expect(myTeam).toEqual({
+    members: setHero
+    })
+});
+
+test('Add Hero in team Error', () => {
+  
+  expect(() => {
+    let myTeam = new Team;
+    const myHero = {
+    attack: 25
+  };
+  myTeam.add(myHero);
+  myTeam.add(myHero);
+  }).toThrow('такой персонаж уже есть в команде');
+});
+
+test('Add Heroes in team', () => {
+  let myTeam = new Team;
+  const myHero = {
+    attack: 25
+  };
+  const notMyHero = {
+    attack: 15
+  }
+  let setHero = new Set();
+  setHero.add(myHero);
+  setHero.add(notMyHero);
+  myTeam.addAll(myHero, notMyHero, myHero);
+  expect(myTeam).toEqual({
+    members: setHero
+    })
+});
+
+test('Set in Array', () => {
+  let myTeam = new Team;
+  const myHero = {
+    attack: 25
+  };
+  myTeam.add(myHero);
+  const teamArray = myTeam.toArray();
+  expect(teamArray).toEqual([myHero]);
 });
