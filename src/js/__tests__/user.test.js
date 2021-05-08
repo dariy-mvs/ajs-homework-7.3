@@ -1,22 +1,84 @@
-import ErrorRepository from '../app';
+import Settings from '../app';
 
-test('Creating ErrorRepository', () => {
-  const errorRepository = new ErrorRepository();
-  expect(errorRepository).toEqual({
-    errors: new Map(),
+test('Create settings', () => {
+  const mySettings = new Settings();
+  const expectMapValuesSettings = new Map([
+    ['theme', ['dark', 'light', 'gray']],
+    ['music', ['pop', 'rock', 'chillout', 'off', 'trance']],
+    ['difficulty', ['easy', 'normal', 'hard', 'nightmare']],
+  ]);
+  const expectDefaultMapSettings = new Map([
+    ['theme', 'dark'],
+    ['music', 'trance'],
+    ['difficulty', 'easy'],
+  ]);
+  expect(mySettings).toEqual({
+    settingsValues: expectMapValuesSettings,
+    settingsDefault: expectDefaultMapSettings,
+    ssettingsUser: new Map(),
   });
 });
 
-test('getErrorText', () => {
-  const errorRepository = new ErrorRepository();
-  errorRepository.errors.set(1, 'you just left the room');
-  const textOfMyError = errorRepository.translate(1);
-  expect(textOfMyError).toBe('you just left the room');
+test('settings setter', () => {
+  const mySettings = new Settings();
+  const expectMapValuesSettings = new Map([
+    ['theme', ['dark', 'light', 'gray']],
+    ['music', ['pop', 'rock', 'chillout', 'off', 'trance']],
+    ['difficulty', ['easy', 'normal', 'hard', 'nightmare']],
+  ]);
+  const expectDefaultMapSettings = new Map([
+    ['theme', 'dark'],
+    ['music', 'trance'],
+    ['difficulty', 'easy'],
+  ]);
+  mySettings.settingsUser = { prop: 'music', value: 'rock' };
+  mySettings.settingsUser = { prop: 'theme', value: 'dark' };
+  expect(mySettings).toEqual({
+    settingsValues: expectMapValuesSettings,
+    settingsDefault: expectDefaultMapSettings,
+    ssettingsUser: new Map([
+      ['music', 'rock'],
+      ['theme', 'dark'],
+    ]),
+  });
 });
 
-test('getUnknownErrorText', () => {
-  const errorRepository = new ErrorRepository();
-  errorRepository.errors.set(1, 'you just left the room');
-  const textOfMyError = errorRepository.translate(2);
-  expect(textOfMyError).toBe('Unknown error');
+test('settings setter', () => {
+  const mySettings = new Settings();
+  const expectMapValuesSettings = new Map([
+    ['theme', ['dark', 'light', 'gray']],
+    ['music', ['pop', 'rock', 'chillout', 'off', 'trance']],
+    ['difficulty', ['easy', 'normal', 'hard', 'nightmare']],
+  ]);
+  const expectDefaultMapSettings = new Map([
+    ['theme', 'dark'],
+    ['music', 'trance'],
+    ['difficulty', 'easy'],
+  ]);
+  mySettings.settingsUser = { prop: 'music', value: 'rock' };
+  expect(mySettings).toEqual({
+    settingsValues: expectMapValuesSettings,
+    settingsDefault: expectDefaultMapSettings,
+    ssettingsUser: new Map([
+      ['music', 'rock'],
+    ]),
+  });
+});
+
+test('settings getter', () => {
+  expect(() => {
+    const mySettings = new Settings();
+    mySettings.settingsUser = { prop: 'art', value: 'rock' };
+  }).toThrow('такого свойства не существует');
+});
+
+test('settings getter', () => {
+  const mySettings = new Settings();
+  mySettings.settingsUser = { prop: 'music', value: 'rock' };
+  const settingsAll = mySettings.settings;
+  expect(settingsAll).toEqual(new Map([
+    ['theme', 'dark'],
+    ['music', 'rock'],
+    ['difficulty', 'easy'],
+  ]));
 });
